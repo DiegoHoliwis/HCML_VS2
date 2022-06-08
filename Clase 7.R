@@ -70,5 +70,22 @@ sapply(X = Lista[c(1,3)], FUN = median)
 
 # Paquete purrr ----
 
+Lista = list("Elemento 1" = 1:10,
+             "Elemento 2" = 11:20,
+             "Elemento 3" = 21:30)
 
+map_dbl(Lista, median)
+map_dfc(Lista, median)
 
+# Actividad de ejemplo ----
+
+asignaturas <- readxl::read_excel('Clase 07//Alumnos por asignatura.xlsx')
+
+asignaturas %>% 
+  select(`2015-1-APR`,`2015-2-APR`)
+
+names(asignaturas) %>% str_subset('2015-1')
+
+asignaturas %>% 
+  select(str_subset(names(.),'2015-1')) %>% 
+  mutate(TOTAL = apply(., MARGIN = 1, FUN = function(x){sum(x,na.rm = TRUE)}))
