@@ -15,7 +15,7 @@ library(data.table)
 flores %>% tibble()
 
 # La función apply recibe una función la cual no debe estar ejecutada
-# esto quiere decir que no se debe colocar los parentesis, ejemplo:
+# esto quiere decir que no se debe colocar los paréntesis, ejemplo:
 
 # Forma incorrecta
 apply(flores[,1:4], MARGIN = 2, FUN = sum())
@@ -37,4 +37,38 @@ my_suma <- function(x){
 }
 
 apply(flores[,1:4], MARGIN = 2, FUN = my_suma)
+
+## tapply ----
+
+# Usando tapply
+tapply(
+  X = flores$Largo.Sepalo,
+  INDEX = flores$Especies,
+  FUN = mean
+)
+
+# Equivalente usando dplyr
+flores %>% 
+  group_by(Especies) %>% 
+  summarise(Premio_Largo_sepalo = mean(Largo.Sepalo))
+
+## lapply ----
+# Aplicamos una función para cada elemento de una lista
+
+Lista = list("Elemento 1" = 1:10,
+             "Elemento 2" = 11:20,
+             "Elemento 3" = 21:30)
+
+lapply(X = Lista, FUN = median)
+
+## sapply ----
+Lista = list("Elemento 1" = 1:10,
+             "Elemento 2" = 11:20,
+             "Elemento 3" = 21:30)
+
+sapply(X = Lista[c(1,3)], FUN = median)
+
+# Paquete purrr ----
+
+
 
