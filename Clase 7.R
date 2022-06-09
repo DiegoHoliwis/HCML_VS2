@@ -167,6 +167,76 @@ map_dfr(notas, Mensaje_alumno)
 
 ## Paquete nest ----
 
+flores %>% 
+  group_by(Especies) %>% 
+  nest()
+
+## Función walk
+
+dir()
+dir.create()
+
+# Paso 1
+dir.create('Bases_Continentes')
+
+# Opción 1
+
+paises %>% 
+  group_nest(continente) %>% 
+  mutate(file = paste0('Bases_Continentes//',continente,'.csv')) %>% 
+  select(x = data,
+         file = file) %>% 
+  pwalk(write_csv)
+
+# Opción 2
+
+paises %>% 
+  group_nest(continente) %>% 
+  mutate(file = paste0('Bases_Continentes//',continente,'.csv')) %>% 
+  select(data,file) %>% 
+  walk2(
+    .x = .$data,
+    .y = .$file,
+    .f = ~write_csv(.x,.y)
+  )
+
+## Actividad final ----
+
+df <- readxl::read_excel('Clase 07//esperanza.xlsx')
+df %>% glimpse()
+
+df <- df %>% 
+  mutate(life_expectancy = life_expectancy %>% as.double(),
+         alcohol = alcohol %>% as.double(),
+         bmi = bmi %>% as.double(),
+         hiv_aids = hiv_aids %>% as.double(),
+         schooling = schooling %>% as.double())
+
+df %>% glimpse()
+
+
+# Preguinta 1
+
+tabla_resumen <- function(df){
+  df %>% 
+    group_by(status) %>% 
+    summarise(N_paises          = n(),
+              Media_vida        = mean(life_expectancy, na.rm = TRUE),
+              Media_alcohol     = mean(alcohol, na.rm = TRUE),
+              Media_schooling   = mean(schooling, na.rm = TRUE),
+              Media_muertes_VIH = mean(hiv_aids, na.rm = TRUE))
+}
+tabla_resumen(df)
+
+
+# Pregunta 2
+dir.create('Bases_Anuales')
+
+# Pregunta 3
+
+df %>% 
+  group_nest(year) %>% 
+  mutate()
 
 
 
