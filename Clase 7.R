@@ -234,11 +234,24 @@ dir.create('Bases_Anuales')
 
 # Pregunta 3
 
+# Guardar en csv
 df %>% 
   group_nest(year) %>% 
-  mutate()
+  mutate(tabla_resumen = map(data,tabla_resumen),
+         file = paste0('Bases_Anuales//Año ',year,'.csv')) %>% 
+  select(x = tabla_resumen,
+         file = file) %>% 
+  pwalk(write_csv)
 
+# Guardar en xlsx
+library(openxlsx)
 
-
+df %>% 
+  group_nest(year) %>% 
+  mutate(tabla_resumen = map(data,tabla_resumen),
+         file = paste0('Bases_Anuales//Año ',year,'.xlsx')) %>% 
+  select(x = tabla_resumen,
+         file = file) %>% 
+  pwalk(write.xlsx)
 
 
