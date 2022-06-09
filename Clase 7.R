@@ -77,7 +77,7 @@ Lista = list("Elemento 1" = 1:10,
 map_dbl(Lista, median)
 map_dfc(Lista, median)
 
-# Actividad de ejemplo ----
+# Actividad de ejemplo 1----
 
 asignaturas <- readxl::read_excel('Clase 07//Alumnos por asignatura.xlsx')
 
@@ -86,6 +86,46 @@ asignaturas %>%
 
 names(asignaturas) %>% str_subset('2015-1')
 
+semestre <- '2015-2'
+
 asignaturas %>% 
-  select(str_subset(names(.),'2015-1')) %>% 
-  mutate(TOTAL = apply(., MARGIN = 1, FUN = function(x){sum(x,na.rm = TRUE)}))
+  select(str_subset(names(.),semestre)) %>% 
+  mutate(TOTAL = apply(., MARGIN = 1, FUN = function(x){sum(x,na.rm = TRUE)})) %>% 
+  setnames('TOTAL',paste0('Inscritos_',semestre))
+
+
+c('2015-1','2015-2','2016-1','2016-2','2017-1') %>% 
+  map_dfc(.f = function(x){
+    asignaturas %>% 
+      select(str_subset(names(.),x)) %>% 
+      mutate(TOTAL = apply(., MARGIN = 1, FUN = function(x){sum(x,na.rm = TRUE)})) %>% 
+      setnames('TOTAL',paste0('Inscritos_',x))
+    
+  })
+
+# Actividad de ejemplo 2----
+
+# Que pasaría si quiero cargar muchas bases de datos que estas codificadas del mismo modo
+
+# Utilizando read_csv
+autos <- dir('autos')[1:5] %>% 
+  map_dfr(.f = function(x){
+    paste0('autos//',x) %>% 
+      read_csv()
+  })
+
+
+# Utilizando data.table
+autos <- dir('autos') %>% 
+  map_dfr(.f = function(x){
+    paste0('autos//',x) %>% 
+      fread(encoding = 'UTF-8')
+  })
+
+
+
+
+
+
+
+
