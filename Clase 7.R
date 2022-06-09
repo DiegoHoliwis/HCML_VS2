@@ -119,7 +119,10 @@ autos <- dir('autos')[1:5] %>%
 autos <- dir('autos') %>% 
   map_dfr(.f = function(x){
     paste0('autos//',x) %>% 
-      fread(encoding = 'UTF-8')
+      fread(encoding = 'UTF-8',
+            nrows = 5
+            # select = c('Nombre')
+            )
   })
 
 
