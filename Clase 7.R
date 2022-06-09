@@ -118,14 +118,54 @@ autos <- dir('autos')[1:5] %>%
 # Utilizando data.table
 autos <- dir('autos') %>% 
   map_dfr(.f = function(x){
+    print('hola')
+    
     paste0('autos//',x) %>% 
       fread(encoding = 'UTF-8',
             nrows = 5
             # select = c('Nombre')
             )
-  })
+})
 
+## map2 ----
 
+Ejemplo = function(x,y){
+  log(x) + y^2
+}
+
+map2_dbl(1:3, 11:13, Ejemplo)
+
+## Actividad 1 -----
+
+# Pregunta 1.
+
+funcion_par <- function(x){
+  x*2 %>% return()
+}
+
+map_dbl(0:9, funcion_par)
+
+# Pregunta 2.
+
+Mensaje_alumno <- function(x){
+  mensaje <- case_when(is.numeric(x) == FALSE ~ "Error, ingrese un número.",
+            x < 1 ~ "Error, ingrese un número entre 1 y 7.",
+            x > 7 ~ "Error, ingrese un número entre 1 y 7.",
+            x >= 4 ~ "¡Felicitaciones!",
+            x <4 ~ "Reprobaste")
+  
+  tibble(Nota = x, mensaje = mensaje)
+  
+}
+
+Mensaje_alumno(7)
+
+notas <- c(6.8, 5.5, 3.2, 4.3, 2.1,
+           6.5, 4.7, 5.9, 6.2, 3.8)
+
+map_dfr(notas, Mensaje_alumno)
+
+## Paquete nest ----
 
 
 
