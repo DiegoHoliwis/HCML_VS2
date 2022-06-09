@@ -124,7 +124,8 @@ autos <- dir('autos') %>%
       fread(encoding = 'UTF-8',
             nrows = 5
             # select = c('Nombre')
-            )
+            ) %>% 
+      slice(1:2,5)
 })
 
 ## map2 ----
@@ -248,8 +249,8 @@ library(openxlsx)
 
 df %>% 
   group_nest(year) %>% 
-  mutate(tabla_resumen = map(data,tabla_resumen),
-         file = paste0('Bases_Anuales//Año ',year,'.xlsx')) %>% 
+  mutate(file = paste0('Bases_Anuales//Año ',year,'.xlsx'),
+         tabla_resumen = map(data,tabla_resumen)) %>% 
   select(x = tabla_resumen,
          file = file) %>% 
   pwalk(write.xlsx)
